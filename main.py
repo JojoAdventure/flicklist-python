@@ -31,7 +31,10 @@ terrible_movies = [
     "Gigli",
     "Star Wars Episode 1: Attack of the Clones",
     "Paul Blart: Mall Cop 2",
-    "Nine Lives"
+    "Nine Lives",
+    "The Room",
+    "Food Fight",
+    "Minions"
 ]
 
 
@@ -39,8 +42,10 @@ def getCurrentWatchlist():
     """ Returns the user's current watchlist """
 
     # for now, we are just pretending
-    return [ "Star Wars", "Minions", "Freaky Friday", "My Favorite Martian" ]
+    return [ "Star Wars", "Lion King", "Freaky Friday", "My Favorite Martian" ]
 
+def getTerribleMovieList():
+    return terrible_movies
 
 class Index(webapp2.RequestHandler):
     """ Handles requests coming in to '/' (the root of our site)
@@ -103,17 +108,25 @@ class AddMovie(webapp2.RequestHandler):
 
         # TODO 2
         # if the user typed nothing at all, redirect and yell at them
+        if new_movie == "":
+            error = "You have to name a dang movie, ya dingus!"
+            error_escaped = cgi.escape(error, quote=True)
+            self.redirect("/?error=" + error_escaped)
 
 
         # TODO 3
         # if the user wants to add a terrible movie, redirect and yell at them
+        if (new_movie in getTerribleMovieList()) == True:
+            error = "NO. NO, NOT THAT ONE. I FORBID IT. TO THE DEPTHS I BANISH THEE."
+            error_escaped = cgi.escape(error, quote=True)
+            self.redirect("/?error=" + error_escaped)
 
 
         # TODO 1
         # 'escape' the user's input so that if they typed HTML, it doesn't mess up our site
 
         # build response content
-        new_movie_element = "<strong>" + new_movie + "</strong>"
+        new_movie_element = "<strong>" + cgi.escape(new_movie, quote=True) + "</strong>"
         sentence = new_movie_element + " has been added to your Watchlist!"
         response = page_header + "<p>" + sentence + "</p>" + page_footer
         self.response.write(response)
