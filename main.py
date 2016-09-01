@@ -10,9 +10,10 @@ jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir))
 # a list of movies that nobody should be allowed to watch
 terrible_movies = [
     "Gigli",
-    "Star Wars Episode 1: Attack of the Clones",
+    "Star Wars Episode 1: The Phantom Menace",
     "Paul Blart: Mall Cop 2",
-    "Nine Lives"
+    "Nine Lives",
+    "Minions"
 ]
 
 
@@ -20,7 +21,7 @@ def getCurrentWatchlist():
     """ Returns the user's current watchlist """
 
     # for now, we are just pretending
-    return [ "Star Wars", "Minions", "Freaky Friday", "My Favorite Martian" ]
+    return [ "Star Wars", "Literally anything except Minions", "Freaky Friday", "My Favorite Martian" ]
 
 
 class Index(webapp2.RequestHandler):
@@ -57,7 +58,9 @@ class AddMovie(webapp2.RequestHandler):
         # TODO 1
         # Use a template to render the confirmation message
 
-        self.response.write("Under construction...")
+        t = jinja_env.get_template("add.html")
+        response = t.render(new_movie=new_movie)
+        self.response.write(response)
 
 
 class CrossOffMovie(webapp2.RequestHandler):
